@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -15,11 +16,13 @@ import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/err
 export class CoursesComponent implements OnInit {
 
   courses$: Observable<Course[]>;
-  displayedColumns: string[] = ['name', 'category'];
+  displayedColumns: string[] = ['name', 'category', 'actions'];
 
   constructor(
     private coursesService: CoursesService, 
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute) {
       this.courses$ = this.coursesService.list().pipe(
         catchError(error => {
           this.onError('Erro ao carregar cursos! Detalhe do erro: ' + error.message);
@@ -38,4 +41,8 @@ export class CoursesComponent implements OnInit {
     });
   }
 
+  onAdd() {
+    console.log('onAdd');
+    this.router.navigate(['new'], { relativeTo: this.route });
+  }
 }
