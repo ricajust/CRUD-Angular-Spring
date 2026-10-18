@@ -26,7 +26,7 @@ export class CoursesService {
 
   save(record: Course): Observable<Course> {
     return this._http
-      .post<Course>(`${this.API}a`, record)
+      .post<Course>(`${this.API}`, record)
       .pipe(first());
   }
 }

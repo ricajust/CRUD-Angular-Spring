@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoursesService } from '../services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-course-form',
@@ -15,7 +18,9 @@ export class CourseFormComponent implements OnInit {
   constructor(
     private _coursesService: CoursesService,
     private _formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _location: Location,
+    public dialog: MatDialog,
   ) {
     this.form = this._formBuilder.group({
       name: [null],
@@ -34,26 +39,30 @@ export class CourseFormComponent implements OnInit {
       this._coursesService
       .save(this.form.value)
       .subscribe({
-        next: result => console.log(result),
-        error: err => {
-          console.warn(err);
-          this.onError(err);
-        }
+        next: () => this.onSuccess(),
+        error: err => this.onError(err)
       });
     }
   } 
   
   onCancel() {
-    console.log('Canceling...');
     this.form.reset();
+    this._location.back();
+  }
+
+  onSuccess() {
+    this._snackBar.open(
+      'Curso salvo com sucesso!',
+      '',
+      { duration: 3000 }
+    );
+    this.onCancel();
   }
 
   onError(err: Error) {
-    this._snackBar.open(
-      `Ocorreu um erro! Detalhe: ${ err.message }`, 
-      '', 
-      { duration: 5000 }
-    );
+    this.dialog.open(ErrorDialogComponent, {
+      data: `Ocorreu um erro! Detalhe: ${ err.message }`
+    });
     this.onCancel();
   }
 }
