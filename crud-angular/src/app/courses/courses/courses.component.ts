@@ -19,11 +19,11 @@ export class CoursesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'category', 'actions'];
 
   constructor(
-    private coursesService: CoursesService, 
     public dialog: MatDialog,
-    private router: Router,
-    private route: ActivatedRoute) {
-      this.courses$ = this.coursesService.list().pipe(
+    private _coursesService: CoursesService, 
+    private _router: Router,
+    private _route: ActivatedRoute) {
+      this.courses$ = this._coursesService.list().pipe(
         catchError(error => {
           this.onError('Erro ao carregar cursos! Detalhe do erro: ' + error.message);
           return of([])
@@ -43,6 +43,6 @@ export class CoursesComponent implements OnInit {
 
   onAdd() {
     console.log('onAdd');
-    this.router.navigate(['new'], { relativeTo: this.route });
+    this._router.navigate(['new'], { relativeTo: this._route });
   }
 }
