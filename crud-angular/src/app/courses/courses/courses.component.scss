@@ -1,6 +1,14 @@
-table {
-  width: 100%;
+mat-card{
+  width: 80%;
+  margin: 2em auto;
 }
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
 .loading-spinner {
   background-color: rgba(0, 0, 0, 0.15);
   padding: 25px;
