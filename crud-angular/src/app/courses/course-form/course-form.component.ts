@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, NonNullableFormBuilder } from '@angular/forms';
 import { CoursesService } from '../services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,21 +13,21 @@ import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/err
 })
 export class CourseFormComponent implements OnInit {
 
-  form: UntypedFormGroup;
+  form = this._formBuilder.group({ // pode ser aqui ou dentro do construtor | Estamos declarando e tipando
+    // name: new FormControl<string>('', { nonNullable: true }), //pode ser assim ...
+    // category: ['', { nonNullable: true }]// ... ou assim, mais simplificado ...
+    name: [''], // ... ou vc pode usar a classe NonNullableFormBuilder que insere a validação automaticamente ...
+    category: [''] // ... que deixa tudo mais simplificado
+  });
 
   constructor(
     private _coursesService: CoursesService,
-    private _formBuilder: UntypedFormBuilder,
+    private _formBuilder: NonNullableFormBuilder, 
+    // private _formBuilder: FormBuilder, //Aqui a referência do comentário
     private _snackBar: MatSnackBar,
     private _location: Location,
     public dialog: MatDialog,
-  ) {
-    this.form = this._formBuilder.group({
-      name: [null],
-      category: [null]
-    });
-
-  }
+  ) { }
 
   ngOnInit(): void {
   }
